@@ -9,6 +9,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.use("/createUser", userRoutes)
+app.use("/createUser", async function (req, res) {
+    res.send("hello")
+})
 
 export { app }
