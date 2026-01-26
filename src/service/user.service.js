@@ -1,4 +1,4 @@
-import {create,findSingleData} from '../dal/dal.js';
+import {create,findSingleData,} from '../dal/dal.js';
 import {User} from '../models/user.model.js'
 
 export const createUser = async(payload) => {
@@ -12,3 +12,24 @@ export const findUser = async(condition) => {
     if(getExistingUser) return {success:true,message:"User already exists",data:null};
     return {success:false,message:'No user exist with this detail',data:getExistingUser}
 }
+
+// export const findById = async()
+
+export const getUserById = async (userId) => {
+    const user = await findById(User, userId);
+
+    if (!user) {
+        return {
+            success: false,
+            message: 'User not found',
+            data: null
+            
+        };
+    }
+
+    return {
+        success: true,
+        message: 'User found',
+        data: user
+    };
+};
