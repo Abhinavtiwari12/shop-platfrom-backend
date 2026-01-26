@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose, { Schema } from "mongoose";
-import bcrypt from "brcypt"
+import bcrypt from "bcryptjs"
 
 const userSchema = new Schema(
     // username, email, password, name, refreshtoken
@@ -51,4 +51,4 @@ userSchema.method.isPasswordCorrect = async function(password) {
     return await bcrypt.compare(password, this.password)
 }
 
-export const  User = mongoose.model("User", userSchema)
+export const  User = new mongoose.model("User", userSchema)

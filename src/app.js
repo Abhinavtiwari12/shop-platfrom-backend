@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import {registerUser} from '../src/controllers/user.controller.js'
 
 const app = express();
 
@@ -9,8 +10,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.use("/createUser", async function (req, res) {
+app.use("/test", async function (req, res) {
     res.send("hello")
 })
+app.post('/createUser',registerUser)
 
 export { app }

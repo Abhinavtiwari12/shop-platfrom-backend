@@ -1,7 +1,8 @@
-import { asyncHandler } from '../utils/asyncHandeler';
-import { ApiResponse } from '../utils/apiResponse';
-import { ApiError } from '../utils/apiError';
-import { User } from '../models/user.model';
+import { asyncHandler } from '../utils/asyncHandeler.js';
+import { ApiResponse } from '../utils/apiResponse.js';
+import { ApiError } from '../utils/apiError.js';
+import { User } from '../models/user.model.js';
+import {createUser,findUser } from '../service/user.service.js';
 
 
 
@@ -15,30 +16,33 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "All field are require.")
     }
 
-    const existedUser = await User.findOne( {
-        $or: [{username},{email}]
-    } )
+    const checkExistingUserCond = {
+        email,
+        username,
+    }
+    const existedUser = await findUser(checkExistingUserCond)
 
-    if (!existedUser) {
-        throw new ApiError(409, "username or email already exixted try another")
+    if (existedUser.success) {
+        throw new ApiError(409, existedUser.message)
     }
 
-    const user = await User.create({
+    const userPayload = {
         fullname,
         email,
         password,
         username: username.toLowerCase()
 
-    })
+    }
 
-    const createdUser = User.findById(user._id).select(" -password -refreshToken ")
+    // const createdUser = User.findById(user._id).select(" -password -refreshToken ")
+    const createdUser = await createUser(userPayload)
 
-    if (!createdUser) {
-        throw new ApiError(500, "somthing went wrong ")
+    if (!createdUser.success) {
+        throw new ApiError(500, createUser.message)
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "user registered successfully.")
+        new ApiResponse(200, createdUser.data, createdUser.message)
     )
 
 })
