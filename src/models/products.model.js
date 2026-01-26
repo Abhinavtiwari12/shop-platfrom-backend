@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { category } from "./category.model";
+import { category } from "../models/category.model.js";
 
 const productSchema = new mongoose.Schema(
     // product details, product-id, quantity, brands, price, name, colour, 

@@ -3,7 +3,7 @@
 import dotenv from 'dotenv'
 
 import express from "express";
-import connectDB from "./batabase/db.js";
+import connectDB from "./database/db.js";
 
 import { app } from './app.js'
 

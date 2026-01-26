@@ -1,6 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import {registerUser} from '../src/controllers/user.controller.js'
+import {registerUser} from './controllers/user.controller.js'
 
 const app = express();
 
