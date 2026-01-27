@@ -34,6 +34,14 @@ const userSchema = new Schema(
         },
         refreshToken:{
             type: String
+        },
+        cart:{
+            type: Array,
+            default: []
+        },
+        order:{
+            type: Array,
+            default: []
         }
     },
     {
