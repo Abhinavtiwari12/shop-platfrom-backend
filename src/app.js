@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import {registerUser, userlogin} from './controllers/user.controller.js'
+import {registerUser, userlogin, userlogout} from './controllers/user.controller.js'
+import { verifyJwt } from "./middlewares/autho.middlewares.js";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use("/test", async function (req, res) {
 })
 app.post('/createUser',registerUser)
 app.post('/loginUser', userlogin)
+app.post('/user-logout', verifyJwt, userlogout)
 
 export { app }
