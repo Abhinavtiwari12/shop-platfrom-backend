@@ -1,6 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import {registerUser} from './controllers/user.controller.js'
+import {registerUser, userlogin} from './controllers/user.controller.js'
 
 const app = express();
 
@@ -14,5 +14,6 @@ app.use("/test", async function (req, res) {
     res.send("hello")
 })
 app.post('/createUser',registerUser)
+app.post('/loginUser', userlogin)
 
 export { app }
