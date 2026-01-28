@@ -118,7 +118,7 @@ const ownerlogin = asyncHandler( async (req, res) => {
     
    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(owner._id)
 
-    const loggedInOwner = await User.findById(owner._id).select("-password -refreshToken")
+    const loggedInOwner = await Owner.findById(owner._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,

@@ -9,8 +9,8 @@ const router = Router();
 
 
 router.route('/createUser').post(registerUser)
-router.route('/user-logout').post(verifyJwt, userlogout)
 router.route('/login').post(userlogin)
+router.route('/user-logout').post(verifyJwt, userlogout)
 
 
 export default router
