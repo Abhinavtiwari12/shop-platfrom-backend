@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
 import ownerRouter from "./routes/owner.routes.js"
+import productRouter from "./routes/products.route.js"
 import cors from 'cors';
 
 
@@ -27,7 +28,8 @@ app.use(cookieParser());
 
 
 app.use('/api/user', userRouter);
-app.use('/api/owner', ownerRouter)
+app.use('/api/owner', ownerRouter);
+app.use('/api/product', productRouter)
 
 
 // app.post('/createUser',registerUser)
