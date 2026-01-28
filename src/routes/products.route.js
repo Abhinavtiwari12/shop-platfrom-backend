@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { verifyJwt } from "../middlewares/autho.middlewares.js";
-import { createProduct } from "../controllers/prodeuct.controller.js";
+import { verifyJwtOwner  } from "../middlewares/autho.middlewares.js";
+import { createProduct, updateProduct } from "../controllers/prodeuct.controller.js";
 import {uplode} from "../middlewares/multer.middleware.js"
 
 
@@ -14,6 +14,7 @@ router.route('/createProduct').post(
         }
     ]),
     
-    createProduct)
+createProduct)
 
+router.route('/updateProduct').post( updateProduct)
 export default router

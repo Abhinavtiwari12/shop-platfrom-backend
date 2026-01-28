@@ -30,7 +30,7 @@ const createProduct = asyncHandler( async (req, res) =>{
         throw new ApiError(400, "All field are require.")
     }
 
-    const productImageLocalPth = req.files?.productImage?.path;
+    const productImageLocalPth = req.files?.productImage[0]?.path;
 
     if (!productImageLocalPth) {
         throw new ApiError(400, "Product image is require")
@@ -59,4 +59,27 @@ const createProduct = asyncHandler( async (req, res) =>{
     )
 })
 
-export { createProduct }
+const updateProduct = asyncHandler( async (req, res) => {
+    const {productName, quantity, price, category} = req.body
+
+    const prodeuct = await Product.findByIdAndUpdate(
+        req.product?._id,
+        {
+            $set: {
+                productName,
+                quantity,
+                price,
+                category, 
+            }
+        },
+        {
+            new: true
+        }
+    ) 
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Account updated successfully"))
+})
+
+
+export { createProduct, updateProduct }
