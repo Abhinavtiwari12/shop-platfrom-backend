@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
+import ownerRouter from "./routes/owner.routes.js"
 import cors from 'cors';
 
 
@@ -25,7 +26,8 @@ app.use(cookieParser());
 // })
 
 
-app.use('/api/user', userRouter)
+app.use('/api/user', userRouter);
+app.use('/api/owner', ownerRouter)
 
 
 // app.post('/createUser',registerUser)
