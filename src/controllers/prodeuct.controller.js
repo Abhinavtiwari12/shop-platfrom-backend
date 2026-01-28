@@ -58,3 +58,5 @@ const createProduct = asyncHandler( async (req, res) =>{
         new ApiResponse(200, newProduct, "New product added Successfully")
     )
 })
+
+export { createProduct }
