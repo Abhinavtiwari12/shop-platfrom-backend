@@ -33,7 +33,32 @@ const ownerSchema = new Schema({
     },
     refreshToken:{
         type: String
-    }
+    },
+    
+    productName: {
+            type: String,
+            require: true,
+        },
+        productId :{
+            type: String,
+            require: true,
+            unique: true
+        },
+        productImage: {
+            type: String  // url
+        },
+        quantity:{
+            type: Number,
+            default : 0
+        },
+        price:{
+            type: Number,
+            require: true,
+        },
+        category:{
+            type: String,
+        },
+
 })
 
 
