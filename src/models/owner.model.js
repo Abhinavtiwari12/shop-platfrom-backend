@@ -1,4 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 
 const ownerSchema = new Schema({
 
@@ -50,7 +53,7 @@ ownerSchema.methods.generateAccessToken = function() {
             _id: this._id,
             email: this.email,
             username: this.username,
-            fullname: this.email
+            fullname: this.fullname
         },
         process.env.ACCESS_TOKEN_SECRET,
         {

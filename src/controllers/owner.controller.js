@@ -2,7 +2,7 @@ import { asyncHandler } from '../utils/asyncHandeler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { User } from '../models/user.model.js';
-// import {createUser } from '../service/user.service.js';
+import {createUser } from '../service/user.service.js';
 import { Owner } from '../models/owner.model.js';
 
 
