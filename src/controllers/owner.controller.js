@@ -239,6 +239,21 @@ const updateProduct = asyncHandler( async (req, res) => {
     .json(new ApiResponse(200, product, "Account updated successfully"))
 })
 
+const deleteProduct = asyncHandler(async (req, res) => {
+    const {productId} = req.body
+
+    const product = await Product.findOneAndDelete(
+        {productId: productId}
+    )
+
+    if (!product) {
+        throw new ApiError(404, "Product does not dound")
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, product, "product delete sucessfull.")
+    )
+})
 
 
 
@@ -248,5 +263,6 @@ export {
     ownerlogin,
     ownerlogout,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
  }

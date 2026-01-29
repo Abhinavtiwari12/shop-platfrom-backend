@@ -3,7 +3,13 @@ import { Router } from "express";
 import { verifyJwtOwner } from "../middlewares/autho.middlewares.js";
 import { uplode } from "../middlewares/multer.middleware.js";
 
-import { registerOwner, ownerlogin, ownerlogout, createProduct, updateProduct } from "../controllers/owner.controller.js";
+import { registerOwner,
+    ownerlogin, 
+    ownerlogout, 
+    createProduct, 
+    updateProduct, 
+    deleteProduct 
+} from "../controllers/owner.controller.js";
 
 
 const router = Router();
@@ -21,6 +27,7 @@ router.route('/createProduct').post(
 createProduct)
 
 router.route('/updateProduct').post(verifyJwtOwner, updateProduct)
+router.route('/deleteProduct').post(verifyJwtOwner, deleteProduct)
 
 // router.route('/updateProduct/:id').post(verifyJwtOwner, updateProduct)
 

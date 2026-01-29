@@ -17,4 +17,5 @@ router.route('/createProduct').post(
 createProduct)
 
 router.route('/updateProduct').post( updateProduct)
+
 export default router
