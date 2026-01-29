@@ -208,10 +208,15 @@ const createProduct = asyncHandler( async (req, res) =>{
 })
 
 const updateProduct = asyncHandler( async (req, res) => {
-    const {productName, quantity, price, category} = req.params
+    console.log("Params ID:", req.params.id);
+    console.log("Body:", req.body);
+
+    const {productName, quantity, price, category, productId} = req.body
 
     const product = await Product.findByIdAndUpdate(
-        req.Product?._id,
+        req.body._id,
+        // req.params._id,
+        // { productId: req.body._id},
         {
             $set: {
                 productName,

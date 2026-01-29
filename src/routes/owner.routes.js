@@ -22,5 +22,7 @@ createProduct)
 
 router.route('/updateProduct').post(verifyJwtOwner, updateProduct)
 
+// router.route('/updateProduct/:id').post(verifyJwtOwner, updateProduct)
+
 
 export default router;
