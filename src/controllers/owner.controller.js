@@ -213,10 +213,10 @@ const updateProduct = asyncHandler( async (req, res) => {
 
     const {productName, quantity, price, category, productId} = req.body
 
-    const product = await Product.findByIdAndUpdate(
-        req.body._id,
+    const product = await Product.findOneAndUpdate(
+        // req.body._id,
         // req.params._id,
-        // { productId: req.body._id},
+        { productId: productId},
         {
             $set: {
                 productName,
@@ -230,9 +230,9 @@ const updateProduct = asyncHandler( async (req, res) => {
 
     // const updatedProduct = await Product.findById(Product._id)
 
-    // if (!updatedProduct) {
-    //     throw new ApiError(400, "somthing went wrong product doest not created")
-    // }
+    if (!product) {
+        throw new ApiError(400, "somthing went wrong please check product id.")
+    }
 
     return res
     .status(200)
