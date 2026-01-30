@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
         productId :{
             type: String,
             require: true,
+            unique: true
         },
         productImage: {
             type: String  // url
@@ -27,6 +28,10 @@ const productSchema = new mongoose.Schema(
         category:{
             type: String,
         },
+        searchCount:{
+            type:Number,
+            default:0
+        }
 
     },
     {
