@@ -7,8 +7,11 @@ export const findSingleProduct = async(query) => {
     const getSearchedProduct = await findSingleDataAggregate(Product,query);
     if(getSearchedProduct == []) return {success:false,message:"Unable to get the product",data:null};
     const condition = {
-        _id: new mongoose.Types.ObjectId(getSearchedProduct[0]?._id)
+        // _id: new mongoose.Types.ObjectId(getSearchedProduct[0]?._id)
+        _id: { $in: getSearchedProduct.map(p => p._id) }
+
     }
+    console.log("ifbieurgvn", condition)
     const updateBody = {
             $inc:{
                 searchCount: 1
