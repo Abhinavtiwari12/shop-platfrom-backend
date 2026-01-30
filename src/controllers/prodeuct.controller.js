@@ -3,7 +3,7 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { Product } from '../models/products.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import { findSingleProduct } from '../service/product.service.js';
+import { findSingleProduct, mostSearchedProducts } from '../service/product.service.js';
 import {searchQuery} from '../queries/product.queries.js'
 
 
@@ -138,6 +138,20 @@ if(!getProduct.success){
     });
 });
 
+const getMostSearchedProducts = asyncHandler(async (req, res) => {
+
+  const limit = parseInt(req.query.limit) || 10;
+
+  const products = await mostSearchedProducts(limit);
+
+  return res.status(200).json({
+    success: true,
+    count: products.length,
+    data: products
+  });
+
+});
 
 
-export { createProduct, updateProduct, deleteProduct, searchProducts }
+
+export { createProduct, updateProduct, deleteProduct, searchProducts, getMostSearchedProducts }
