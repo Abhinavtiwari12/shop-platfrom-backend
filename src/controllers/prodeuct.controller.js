@@ -2,7 +2,7 @@ import { asyncHandler } from '../utils/asyncHandeler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { Product } from '../models/products.model.js';
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { uploadOnCloudinary, uploadOnCloudinaryBuffer } from '../utils/cloudinary.js';
 import { findSingleProduct, mostSearchedProducts } from '../service/product.service.js';
 import {searchQuery} from '../queries/product.queries.js'
 
@@ -16,24 +16,12 @@ const createProduct = asyncHandler( async (req, res) =>{
     ) {
         throw new ApiError(400, "All field are require.")
     }
-    // console.log("FILES:", req.files);
 
-
-    // const productImageLocalPth = req.files?.productImage?.path;
-    // const productImageLocalPth = req.files.productImage[0].path.replace(/\\/g, "/");
-
-
-    let productImageLocalPth;
-    if (req.files && Array.isArray(req.files.productImage) && req.files.productImage.length > 0) {
-        productImageLocalPth = req.files.productImage[0].path
-    }
-
-    if (!productImageLocalPth) {
+    if (!req.file || !req.file.buffer) {
         throw new ApiError(400, "Product image is require")
-        
     }
 
-    const productImg = await uploadOnCloudinary(productImageLocalPth);
+    const productImg = await uploadOnCloudinaryBuffer(req.file);
 
     // if (!productImg) {
     //     throw new ApiError(400, "productImage file is required")
