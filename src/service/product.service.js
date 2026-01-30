@@ -21,11 +21,12 @@ export const findSingleProduct = async(query) => {
 
 export const mostSearchedProducts = async (limit) => {
 
-  const products = await mostSearchedproduct(limit);
+    if(!limit)return {success:false,message:"limit is require", data:null}
+    const products = await mostSearchedproduct(limit);
 
-  if (!products || products.length === 0) {
-    return [];
-  }
+    if (!products || products.length === 0) {
+        return [];
+    }
 
-  return products;
+    return {success:true, message:"Most search products got sucessfully.", data:products};
 };
