@@ -30,7 +30,8 @@ const productSchema = new mongoose.Schema(
         },
         searchCount:{
             type:Number,
-            default:0
+            default:0,
+            index: true
         }
 
     },

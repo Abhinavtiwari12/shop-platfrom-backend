@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { verifyJwtOwner  } from "../middlewares/autho.middlewares.js";
-import { createProduct, updateProduct, deleteProduct, searchProducts } from "../controllers/prodeuct.controller.js";
+import { createProduct, 
+    updateProduct, 
+    deleteProduct, 
+    searchProducts, 
+    getMostSearchedProducts 
+} from "../controllers/prodeuct.controller.js";
 import {uplode} from "../middlewares/multer.middleware.js"
 
 
@@ -17,8 +22,9 @@ router.route('/createProduct').post(
     ]),
 createProduct)
 
-router.route('/updateProduct').post(verifyJwtOwner, updateProduct)
-router.route('/deleteProduct').post(verifyJwtOwner, deleteProduct)
+router.route('/updateProduct').put(verifyJwtOwner, updateProduct)
+router.route('/deleteProduct').delete(verifyJwtOwner, deleteProduct)
 router.route('/search').get(verifyJwtOwner, searchProducts)
+router.route('/mostSearch').get(verifyJwtOwner, getMostSearchedProducts)
 
 export default router

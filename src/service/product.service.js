@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {findSingleDataAggregate, updateSingleData} from '../dal/dal.js'
+import {findSingleDataAggregate, mostSearchedproduct, updateSingleData} from '../dal/dal.js'
 import {Product} from '../models/products.model.js'
 
 export const findSingleProduct = async(query) => {
@@ -17,3 +17,15 @@ export const findSingleProduct = async(query) => {
     const updatedSearchedProductCount = await updateSingleData(Product,condition,updateBody);
     return {success:true,message:"Product searched successfully!!",data:updatedSearchedProductCount}   
 }
+
+
+export const mostSearchedProducts = async (limit) => {
+
+  const products = await mostSearchedproduct(limit);
+
+  if (!products || products.length === 0) {
+    return [];
+  }
+
+  return products;
+};
