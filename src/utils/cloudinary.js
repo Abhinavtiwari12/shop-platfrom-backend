@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config();
+
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
 
@@ -25,4 +28,32 @@ const uploadOnCloudinary = async (localFilePath) => {
         return null;
     }
 }
-export {uploadOnCloudinary}
+
+const uploadOnCloudinaryBuffer = async (file) => {
+  try {
+    if (!file || !file.buffer) return null;
+
+    const response = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+
+      stream.end(file.buffer);
+    });
+
+    console.log("File uploaded on Cloudinary:", response.secure_url);
+    return response;
+
+  } catch (error) {
+    console.error("Cloudinary upload failed:", error);
+    return null;
+  }
+};
+
+export {uploadOnCloudinary, uploadOnCloudinaryBuffer}
