@@ -142,11 +142,22 @@ const getMostSearchedProducts = asyncHandler(async (req, res) => {
 
   const limit = parseInt(req.query.limit) || 10;
 
+  if (!limit) {
+        return res.status(400).json({
+            message: "limit is required"
+        });
+    }
+
   const products = await mostSearchedProducts(limit);
+
+  if (!products) {
+    throw new ApiError(400, "product not found please check");
+    
+  }
 
   return res.status(200).json({
     success: true,
-    count: products.length,
+    count: products?.length,
     data: products
   });
 
