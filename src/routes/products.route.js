@@ -15,11 +15,7 @@ const router = Router();
 
 router.route('/createProduct').post(
     verifyJwtOwner,
-    uplode.fields([
-        {name: "productImage",
-            maxCount: 1
-        }
-    ]),
+    uplode.single('productImage'),
 createProduct)
 
 router.route('/updateProduct').put(verifyJwtOwner, updateProduct)
