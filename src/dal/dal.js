@@ -21,9 +21,6 @@ export const updateSingleData = async(model,condition,body) => {
     return await model.findOneAndUpdate(condition,body,{new:true});
 }
 
-export const mostSearchedproduct = async (limit = 10) => {
-  return await Product
-    .find({ searchCount: { $gt: 0 } })
-    .sort({ searchCount: -1 })
-    .limit(limit);
+export const findMany = async (model,condition,sort = {},limit = {}) => {
+  return await model.find(condition).sort(sort).limit(limit);
 };
