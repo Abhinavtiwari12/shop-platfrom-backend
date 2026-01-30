@@ -3,19 +3,25 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { Product } from '../models/products.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { findSingleProduct } from '../service/product.service.js';
+import {searchQuery} from '../queries/product.queries.js'
 
 
 
 const createProduct = asyncHandler( async (req, res) =>{
-    const { productName, productId, quantity, price, category} = req.body
+    const { productName, productId, quantity, price, category,}  = req.body
 
     if(
         [productName, productId, quantity, price, category].some((field) => field?.trim() === "")
     ) {
         throw new ApiError(400, "All field are require.")
     }
+    // console.log("FILES:", req.files);
+
 
     // const productImageLocalPth = req.files?.productImage?.path;
+    // const productImageLocalPth = req.files.productImage[0].path.replace(/\\/g, "/");
+
 
     let productImageLocalPth;
     if (req.files && Array.isArray(req.files.productImage) && req.files.productImage.length > 0) {
@@ -27,12 +33,18 @@ const createProduct = asyncHandler( async (req, res) =>{
         
     }
 
-    const productImage = uploadOnCloudinary(productImageLocalPth)
+    const productImg = await uploadOnCloudinary(productImageLocalPth);
+
+    // if (!productImg) {
+    //     throw new ApiError(400, "productImage file is required")
+    // }
+    
+// console.log("Uploaded Image:", productImg)
 
     const product = await Product.create({
         productName,
         productId,
-        productImage: productImage.url,
+        productImage: productImg?.secure_url || productImg?.url,
         quantity,
         price,
         category, 
@@ -97,5 +109,35 @@ const deleteProduct = asyncHandler(async (req, res) => {
     )
 })
 
+const searchProducts = asyncHandler(async (req, res) => {
 
-export { createProduct, updateProduct, deleteProduct }
+    const { keyword } = req.query;
+
+    if (!keyword) {
+        return res.status(400).json({
+            message: "Keyword is required"
+        });
+    }
+
+    // const products = await Product.find({
+    //     $or: [
+    //         { productName: { $regex: keyword, $options: "i" } },
+    //         { category: { $regex: keyword, $options: "i" } }
+    //     ]
+    // });
+    const query =  searchQuery(keyword);
+    if(!query) ApiError(400,"Unable to get the query")
+    const getProduct = await findSingleProduct(query);
+if(!getProduct.success){
+    return res.status(400).json({message:getProduct?.message});
+}
+
+    res.status(200).json({
+        message:getProduct?.message,
+        data:getProduct?.data
+    });
+});
+
+
+
+export { createProduct, updateProduct, deleteProduct, searchProducts }
