@@ -13,7 +13,7 @@ export const findById = async (model, id) => {
     return await model.findById(id);
 }
 
-export const findSingleDataAggregate = async(model,query) => {
+export const findDataAndAggregate = async(model,query) => {
     return await model.aggregate(query);
 }
 
@@ -21,7 +21,7 @@ export const findSingleDataAggregate = async(model,query) => {
 //     return await model.findOneAndUpdate(condition,body,{new:true});
 // }
 
-export const updateSingleData = async(model,condition,body) => {
+export const updateData = async(model,condition,body) => {
     await model.updateMany(condition,body);
     const updatedData = await model.find(condition);
     return {success:true,message:"Product searched successfully!!",data:updatedData}  

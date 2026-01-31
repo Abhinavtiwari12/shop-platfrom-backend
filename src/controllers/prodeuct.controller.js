@@ -3,7 +3,7 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { Product } from '../models/products.model.js';
 import { uploadOnCloudinary, uploadOnCloudinaryBuffer } from '../utils/cloudinary.js';
-import { findSingleProduct, mostSearchedProducts } from '../service/product.service.js';
+import { findProduct, mostSearchedProducts } from '../service/product.service.js';
 import {searchQuery} from '../queries/product.queries.js'
 
 
@@ -115,7 +115,7 @@ const searchProducts = asyncHandler(async (req, res) => {
     // });
     const query =  searchQuery(keyword);
     if(!query) ApiError(400,"Unable to get the query")
-    const getProduct = await findSingleProduct(query);
+    const getProduct = await findProduct(query);
 if(!getProduct.success){
     return res.status(400).json({message:getProduct?.message});
 }
