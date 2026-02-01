@@ -42,7 +42,24 @@ const userSchema = new Schema(
         order:{
             type: Array,
             default: []
-        }
+        },
+        searchedProducts: [
+            {
+              product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
+                index: true
+              },
+              searchedAt: {
+                type: Date,
+                default: Date.now
+              },
+              count: {
+                type: Number,
+                default: 1
+              }
+            }
+        ]
     },
     {
         timestamps: true
