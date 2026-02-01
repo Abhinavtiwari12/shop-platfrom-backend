@@ -16,11 +16,6 @@ export const findById = async (model, id) => {
 export const findDataAndAggregate = async(model,query) => {
     return await model.aggregate(query);
 }
-
-// export const updateSingleData = async(model,condition,body) => {
-//     return await model.findOneAndUpdate(condition,body,{new:true});
-// }
-
 export const updateData = async(model,condition,body) => {
     await model.updateMany(condition,body);
     const updatedData = await model.find(condition);
