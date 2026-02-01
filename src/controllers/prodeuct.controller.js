@@ -5,6 +5,8 @@ import { Product } from '../models/products.model.js';
 import { uploadOnCloudinary, uploadOnCloudinaryBuffer } from '../utils/cloudinary.js';
 import { findProduct, mostSearchedProducts } from '../service/product.service.js';
 import {searchQuery} from '../queries/product.queries.js'
+import { User } from '../models/user.model.js';
+import mongoose from 'mongoose';
 
 
 
@@ -105,21 +107,47 @@ const searchProducts = asyncHandler(async (req, res) => {
             message: "Keyword is required"
         });
     }
-
-    // const products = await Product.find({
-    //     $or: [
-    //         { productName: { $regex: keyword, $options: "i" } },
-    //         { category: { $regex: keyword, $options: "i" } }
-    //     ]
-    // });
     const query =  searchQuery(keyword);
     if(!query) ApiError(400,"Unable to get the query")
     const getProduct = await findProduct(query);
-if(!getProduct.success){
-    return res.status(400).json({message:getProduct?.message});
-}
 
-    res.status(302).json({
+    if(!getProduct.success){
+    return res.status(400).json({message:getProduct?.message});
+    }
+
+    const products = getProduct.data.data;
+
+    if (req.user && Array.isArray(products) && products.length > 0) {
+
+        const productId = products[0]._id;
+        await User.updateOne(
+            {
+                _id: req.user._id,
+                "searchedProducts.product": productId
+            },
+            {
+                $inc: { "searchedProducts.$.count": 1 },
+                $set: { "searchedProducts.$.searchedAt": new Date() }
+            }
+        );
+        await User.updateOne(
+            {
+                _id: req.user._id,
+                "searchedProducts.product": { $ne: productId }
+            },
+            {
+                $push: {
+                    searchedProducts: {
+                    product: productId,
+                    count: 1,
+                    searchedAt: new Date()
+                    }
+                }
+            }
+        );
+    }
+
+    res.status(200).json({
         message:getProduct?.message,
         data:getProduct?.data
     });
