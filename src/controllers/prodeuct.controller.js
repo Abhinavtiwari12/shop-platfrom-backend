@@ -50,8 +50,7 @@ const createProduct = asyncHandler( async (req, res) =>{
 })
 
 const updateProduct = asyncHandler( async (req, res) => {
-    console.log("Params ID:", req.params.id);
-    console.log("Body:", req.body);
+    
 
     const {productName, quantity, price, category, productId} = req.body
 
@@ -120,7 +119,7 @@ if(!getProduct.success){
     return res.status(400).json({message:getProduct?.message});
 }
 
-    res.status(200).json({
+    res.status(302).json({
         message:getProduct?.message,
         data:getProduct?.data
     });
