@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Category, owner } from "../models/category.model.js";
+import { Owner } from "./owner.model.js";
 
 const productSchema = new mongoose.Schema(
     // product details, product-id, quantity, brands, price, name, colour, 
@@ -38,12 +38,7 @@ const productSchema = new mongoose.Schema(
             ref: "Owner",
           required: true,
           index: true
-        },    
-        searchCount: {
-            type: Number,
-            default: 0,
-          index: true
-        },
+        }, 
         lastSearchedAt: Date,
     },
     {
