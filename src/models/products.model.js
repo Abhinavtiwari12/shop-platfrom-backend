@@ -36,8 +36,8 @@ const productSchema = new mongoose.Schema(
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Owner",
-          required: true,
-          index: true
+            // required: true,
+            index: true
         }, 
         lastSearchedAt: Date,
     },
