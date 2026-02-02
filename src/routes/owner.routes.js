@@ -5,7 +5,9 @@ import { uplode } from "../middlewares/multer.middleware.js";
 
 import { registerOwner,
     ownerlogin, 
-    ownerlogout, 
+    ownerlogout,
+    userMostSearchProduct,
+    userMostSearchKeywords, 
   
 } from "../controllers/owner.controller.js";
 
@@ -15,6 +17,8 @@ const router = Router();
 router.route('/ownerRegister').post(registerOwner)
 router.route('/ownerLogin').post(ownerlogin)
 router.route('/ownerlogout').post(verifyJwtOwner, ownerlogout)
+router.route('/userMostSearchProduct').get(verifyJwtOwner, userMostSearchProduct)
+router.route('/userMostSearchKeyword').get(verifyJwtOwner, userMostSearchKeywords)
 
 
 // router.route('/updateProduct/:id').post(verifyJwtOwner, updateProduct)
