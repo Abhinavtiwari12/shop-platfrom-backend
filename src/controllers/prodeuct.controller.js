@@ -3,7 +3,7 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 import { Product } from '../models/products.model.js';
 import { uploadOnCloudinary, uploadOnCloudinaryBuffer } from '../utils/cloudinary.js';
-import { findProduct, mostSearchedProducts } from '../service/product.service.js';
+import { findProduct, mostSearchedKeywords, mostSearchedProducts } from '../service/product.service.js';
 import {searchQuery} from '../queries/product.queries.js'
 import { User } from '../models/user.model.js';
 import mongoose from 'mongoose';
@@ -147,6 +147,37 @@ const searchProducts = asyncHandler(async (req, res) => {
         );
     }
 
+    if (req.user && req.user._id) {
+
+        const keywordText = keyword.toLowerCase().trim();
+
+        const updateResult = await User.updateOne({
+            _id: req.user._id,
+            "searchedKeywords.keyword": keywordText
+        },
+        {
+            $inc: { "searchedKeywords.$.count": 1 },
+            $set: { "searchedKeywords.$.searchedAt": new Date() }
+        });
+        if (updateResult.matchedCount === 0) {
+            await User.updateOne(
+                { _id: req.user._id },
+                {
+                    $push: {
+                        searchedKeywords: 
+                        {
+                            keyword: keywordText,
+                            count: 1,
+                            searchedAt: new Date()
+                        }
+                    }
+                }
+            );
+        }
+    }
+        
+
+
     res.status(200).json({
         message:getProduct?.message,
         data:getProduct?.data
@@ -180,4 +211,12 @@ const getMostSearchedProducts = asyncHandler(async (req, res) => {
 
 
 
-export { createProduct, updateProduct, deleteProduct, searchProducts, getMostSearchedProducts }
+
+export { 
+    createProduct, 
+    updateProduct, 
+    deleteProduct, 
+    searchProducts, 
+    getMostSearchedProducts, 
+    getMostSearchKeywords 
+}
