@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import {findDataAndAggregate, findMany, updateData} from '../dal/dal.js'
 import {Product} from '../models/products.model.js'
 import { User } from '../models/user.model.js';
+import { ApiError } from '../utils/apiError.js';
 
 export const findProduct = async(query) => {
     if(!query) return {success:false,message:"Condition is required",data:null};
@@ -75,3 +76,105 @@ export const mostSearchedKeywords = async (limit) => {
   };
 };
 
+export const userMostSearchProductService = async(limit) => {
+
+  const safelimit = Number(limit);
+
+  if (!safelimit) {
+    throw new ApiError(404, "limit is required")
+  }
+
+  const searchProducts = await User.aggregate([
+  { $unwind: "$searchedProducts" },
+
+  // product join (name ke liye)
+  {
+    $lookup: {
+      from: "products",
+      localField: "searchedProducts.product",
+      foreignField: "_id",
+      as: "productDetails"
+    }
+  },
+  { $unwind: "$productDetails" },
+
+  // user-wise group
+  {
+    $group: {
+      _id: "$_id",
+      userName: { $first: "$username" },
+      products: {
+        $push: {
+          productId: "$productDetails._id",
+          productName: "$productDetails.productName",
+          count: "$searchedProducts.count"
+        }
+      }
+    }
+  },
+
+   {
+    $project: {
+      userName: 1,
+      products: {
+        $sortArray: {
+          input: "$products",
+          sortBy: { count: -1 }
+        }
+      }
+    }
+  },
+
+  { $limit: safelimit }
+]);
+
+
+
+    if (!searchProducts || searchProducts.length === 0) {
+      return []
+    }
+
+    return {
+    success: true,
+    message: "Most searched products got successfully.",
+    data: searchProducts
+    };
+}
+
+export const userMostSearchKeywordService = async(limit) => {
+
+  const safelimit = Number(limit);
+
+  if (!safelimit) {
+    throw new ApiError(404, "limit is required")
+  }
+
+  const keyword = await User.aggregate([
+  { $unwind: "$searchedKeywords" },
+  { $sort: { "searchedKeywords.count": -1 } },
+  {
+    $group: {
+      _id: "$_id",
+      userName: { $first: "$username" },
+      keywords: {
+        $push: {
+          keyword: "$searchedKeywords.keyword",
+          count: "$searchedKeywords.count"
+        }
+      }
+    }
+  },
+  { $limit : safelimit}
+]);
+
+  if (!keyword || keyword.length === 0) {
+    return []
+  }
+
+  return {
+    success: true,
+    message: "Most searched keyword got successfully.",
+    data: keyword
+    };
+
+}
