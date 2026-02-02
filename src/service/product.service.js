@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import {findDataAndAggregate, findMany, updateData} from '../dal/dal.js'
 import {Product} from '../models/products.model.js'
+import { User } from '../models/user.model.js';
 
 export const findProduct = async(query) => {
     if(!query) return {success:false,message:"Condition is required",data:null};
@@ -39,3 +40,38 @@ export const mostSearchedProducts = async (limit) => {
 
     return {success:true, message:"Most search products got sucessfully.", data:products};
 };
+
+export const mostSearchedKeywords = async (limit) => {
+
+  const safeLimit = Number(limit);
+  if (!safeLimit) {
+    return { success: false, message: "limit is required", data: null };
+  }
+
+  const keywords = await User.aggregate([
+    { $unwind: "$searchedKeywords" },
+    {
+      $group: {
+        _id: "$searchedKeywords.keyword",
+        count: { $sum: "$searchedKeywords.count" }
+      }
+    },
+    { $sort: { count: -1 } },
+    { $limit: safeLimit }
+  ]);
+
+  if (!keywords || keywords.length === 0) {
+    return {
+      success: true,
+      message: "No searched keywords found",
+      data: []
+    };
+  }
+
+  return {
+    success: true,
+    message: "Most searched keywords got successfully.",
+    data: keywords
+  };
+};
+
