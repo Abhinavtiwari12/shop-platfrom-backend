@@ -210,6 +210,25 @@ const getMostSearchedProducts = asyncHandler(async (req, res) => {
 });
 
 
+const getMostSearchKeywords = asyncHandler( async (req, res) => {
+
+    const limit = parseInt(req.query.limit) || 10;
+
+    if (!limit) {
+        throw new ApiError(400, "limit is require");
+    }
+
+    const keywords = await mostSearchedKeywords(limit)
+
+    if (!keywords) {
+        throw new ApiError(400, "keyword not found")
+    }
+    return res.status(200).json({
+    success: true,
+    count: keywords?.length,
+    data: keywords
+  });
+})
 
 
 export { 
