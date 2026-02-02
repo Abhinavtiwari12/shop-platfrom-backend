@@ -4,8 +4,7 @@ import { ApiError } from '../utils/apiError.js';
 import { User } from '../models/user.model.js';
 import {createUser } from '../service/user.service.js';
 import { Owner } from '../models/owner.model.js';
-// import { Product } from '../models/products.model.js';
-// import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { userMostSearchKeywordService, userMostSearchProductService } from '../service/product.service.js';
 
 
 const generateAccessAndRefereshTokens = async(ownerId) =>{
@@ -169,12 +168,49 @@ const ownerlogout = asyncHandler(async (req, res) => {
 })
 
 
+const userMostSearchProduct = asyncHandler( async (req, res) => {
 
+    const limit = parseInt(req.query.limit) || 10;
 
+    if (!limit) {
+        throw new ApiError(404, "limit is require")
+    }
 
+    const product = await userMostSearchProductService(limit);
+
+    if (!product) {
+        throw new ApiError(404," product not found. ")
+    }
+
+    return res.status(200).json({
+    success: true,
+    count: product?.length,
+    data: product
+  });
+})
+
+const userMostSearchKeywords = asyncHandler(async (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
+    if (!limit) {
+        throw new ApiError(404, "limit not found.")
+    }
+    const keyword = await userMostSearchKeywordService(limit);
+    
+    if (!keyword) {
+        throw new ApiError(404, "keyword not found.")
+    }
+
+    return res.status(200).json({
+        success: true,
+        count: keyword?.length,
+        data: keyword
+    })
+})
 
 export { 
     registerOwner,
     ownerlogin,
-    ownerlogout
+    ownerlogout,
+    userMostSearchProduct,
+    userMostSearchKeywords
  }
