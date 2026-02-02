@@ -4,7 +4,8 @@ import { createProduct,
     updateProduct, 
     deleteProduct, 
     searchProducts, 
-    getMostSearchedProducts 
+    getMostSearchedProducts, 
+    getMostSearchKeywords
 } from "../controllers/prodeuct.controller.js";
 import {uplode} from "../middlewares/multer.middleware.js"
 
@@ -20,7 +21,9 @@ createProduct)
 
 router.route('/updateProduct').put(verifyJwtOwner, updateProduct)
 router.route('/deleteProduct').delete(verifyJwtOwner, deleteProduct)
-router.route('/search').get(verifyJwtOwner,verifyJwt, searchProducts)
+// router.route('/search').get(verifyJwtOwner, searchProducts)
+router.route('/search').get(searchProducts)
 router.route('/mostSearch').get(verifyJwtOwner, getMostSearchedProducts)
+router.route('/mostSearchKeyword').get(verifyJwtOwner, getMostSearchKeywords)
 
 export default router
