@@ -45,19 +45,32 @@ const userSchema = new Schema(
         },
         searchedProducts: [
             {
-              product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
-                index: true
-              },
-              searchedAt: {
-                type: Date,
-                default: Date.now
-              },
-              count: {
-                type: Number,
-                default: 1
-              }
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Product",
+                    index: true
+                },
+                searchedAt: {
+                    type: Date,
+                    default: Date.now
+                },
+                count: {
+                    type: Number,
+                    default: 1
+                }
+            }
+        ],
+        searchedKeywords: [
+            {
+              keyword: { type: String },
+              count: { 
+                    type: Number, 
+                    default: 1 
+                },
+                searchedAt: { 
+                    type: Date, 
+                    default: Date.now 
+                }
             }
         ]
     },
