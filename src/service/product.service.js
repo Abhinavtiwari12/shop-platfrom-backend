@@ -178,3 +178,76 @@ export const userMostSearchKeywordService = async(limit) => {
     };
 
 }
+
+export const getUserSearchedProductsByEmailService = async (email) => {
+  if (!email) {
+    throw new ApiError(400, "email is required");
+  }
+
+  const data = await User.aggregate([
+    { $match: { email } },
+
+    { $unwind: "$searchedProducts" },
+
+    {
+      $lookup: {
+        from: "products",
+        localField: "searchedProducts.product",
+        foreignField: "_id",
+        as: "product"
+      }
+    },
+    { $unwind: "$product" },
+
+    {
+      $project: {
+        _id: 0,
+        // email: 1,
+        productId: "$product._id",
+        productName: "$product.productName",
+        count: "$searchedProducts.count",
+        searchedAt: "$searchedProducts.searchedAt"
+      }
+    },
+
+    { $sort: { count: -1 } }
+  ]);
+
+  return {
+    success: true,
+    message: "User searched products fetched",
+    data
+  };
+};
+
+
+export const getUserSearchedKeywordByEmailService = async (email) => {
+
+   if (!email) {
+    throw new ApiError(400, "email is required");
+  }
+
+  const data = await User.aggregate([
+    {$match: {email}},
+
+    {$unwind: "$searchedKeywords"},
+
+    {
+      $project: {
+        _id: 0,
+        email: 1,
+        keyword: "$searchedKeywords.keyword",
+        count: "$searchedKeywords.count",
+        searchedAt: "$searchedKeywords.searchedAt"
+      }
+    },
+    {$sort: {count: -1}}
+
+  ])
+
+  return {
+    success: true,
+    message: "user searched keyword fatched.",
+    data
+  }
+}
