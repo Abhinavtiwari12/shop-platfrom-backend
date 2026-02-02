@@ -4,7 +4,7 @@ import { ApiError } from '../utils/apiError.js';
 import { User } from '../models/user.model.js';
 import {createUser } from '../service/user.service.js';
 import { Owner } from '../models/owner.model.js';
-import { userMostSearchKeywordService, userMostSearchProductService } from '../service/product.service.js';
+import { getUserSearchedKeywordByEmailService, getUserSearchedProductsByEmailService, userMostSearchKeywordService, userMostSearchProductService } from '../service/product.service.js';
 
 
 const generateAccessAndRefereshTokens = async(ownerId) =>{
@@ -207,10 +207,53 @@ const userMostSearchKeywords = asyncHandler(async (req, res) => {
     })
 })
 
+const singleUserMostSearchProducts = asyncHandler(async (req, res) => {
+
+    const { email } = req.query
+
+    if (!email) {
+        throw new ApiError(404, "email not found.")
+    }
+    const emailData = await getUserSearchedProductsByEmailService(email);
+    
+    if (emailData.length === 0) {
+        throw new ApiError(400, "No search data found.")
+    }
+
+    return res.status(200).json({
+        success: true,
+        count: emailData?.length,
+        data: emailData
+    })
+})
+
+const singleUserMostSearchKeywords = asyncHandler(async (req, res) => {
+
+    const { email } = req.query
+
+    if (!email) {
+        throw new ApiError(404, "email not found.")
+    }
+    const emailData = await getUserSearchedKeywordByEmailService(email);
+    
+    if (emailData.length === 0) {
+        throw new ApiError(400, "No search data found.")
+    }
+
+    return res.status(200).json({
+        success: true,
+        count: emailData?.length,
+        data: emailData
+    })
+})
+
+
 export { 
     registerOwner,
     ownerlogin,
     ownerlogout,
     userMostSearchProduct,
-    userMostSearchKeywords
+    userMostSearchKeywords,
+    singleUserMostSearchProducts,
+    singleUserMostSearchKeywords
  }
