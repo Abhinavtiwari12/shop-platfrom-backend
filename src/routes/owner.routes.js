@@ -7,7 +7,9 @@ import { registerOwner,
     ownerlogin, 
     ownerlogout,
     userMostSearchProduct,
-    userMostSearchKeywords, 
+    userMostSearchKeywords,
+    singleUserMostSearchProducts,
+    singleUserMostSearchKeywords, 
   
 } from "../controllers/owner.controller.js";
 
@@ -19,6 +21,8 @@ router.route('/ownerLogin').post(ownerlogin)
 router.route('/ownerlogout').post(verifyJwtOwner, ownerlogout)
 router.route('/userMostSearchProduct').get(verifyJwtOwner, userMostSearchProduct)
 router.route('/userMostSearchKeyword').get(verifyJwtOwner, userMostSearchKeywords)
+router.route('/singleUserMostSearchProducts').get(verifyJwtOwner, singleUserMostSearchProducts)
+router.route('/singleUserMostSearchKeywords').get(verifyJwtOwner, singleUserMostSearchKeywords)
 
 
 // router.route('/updateProduct/:id').post(verifyJwtOwner, updateProduct)
