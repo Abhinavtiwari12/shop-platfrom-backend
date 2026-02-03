@@ -35,24 +35,6 @@ const registerOwner = asyncHandler( async (req, res) => {
         throw new ApiError(400, "All field are require.")
     }
 
-    // const checkExistingUserCond = {
-    //     email,
-    //     username,
-    // }
-    // const existedowner = await findUser(checkExistingUserCond)
-
-    // if (existedUser.success) {
-    //     throw new ApiError(409, existedUser.message)
-    // }
-
-    // const userPayload = {
-    //     fullname,
-    //     email,
-    //     password,
-    //     username: username.toLowerCase()
-
-    // }
-
     const existedOwner = await Owner.findOne({
         $or: [{ username }, { email }]
     })
@@ -70,7 +52,6 @@ const registerOwner = asyncHandler( async (req, res) => {
     })
 
     const createdOwner = Owner.findById(owner._id).select(" -password -refreshToken ")
-    // const createdUser = await createUser(userPayload)
 
     if (!createdOwner) {
         throw new ApiError(500, "somthing went wrong")
@@ -90,17 +71,6 @@ const ownerlogin = asyncHandler( async (req, res) => {
     if (!username && !email) {
         throw new ApiError(401, "username and email are required.")
     }
-
-    // const verifyingUser = {
-    //     username,
-    //     email
-    // }
-
-    // const user = await getUserById(verifyingUser)
-
-    // if (user) {
-    //     throw ApiError(409, user.message)
-    // }
 
     const owner = await Owner.findOne({
         $or: [{username},{email}]
