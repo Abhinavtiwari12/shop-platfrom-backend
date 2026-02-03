@@ -9,11 +9,9 @@ export const findProduct = async(query) => {
     const getSearchedProduct = await findDataAndAggregate(Product,query);
     if(getSearchedProduct == []) return {success:false,message:"Unable to get the product",data:null};
     const condition = {
-        // _id: new mongoose.Types.ObjectId(getSearchedProduct[0]?._id)
         _id: { $in: getSearchedProduct.map(p => p._id) }
 
     }
-    // console.log("ifbieurgvn", condition)
     const updateBody = {
             $inc:{
                 searchCount: 1
@@ -87,7 +85,6 @@ export const userMostSearchProductService = async(limit) => {
   const searchProducts = await User.aggregate([
   { $unwind: "$searchedProducts" },
 
-  // product join (name ke liye)
   {
     $lookup: {
       from: "products",
@@ -98,7 +95,6 @@ export const userMostSearchProductService = async(limit) => {
   },
   { $unwind: "$productDetails" },
 
-  // user-wise group
   {
     $group: {
       _id: "$_id",
@@ -202,7 +198,6 @@ export const getUserSearchedProductsByEmailService = async (email) => {
     {
       $project: {
         _id: 0,
-        // email: 1,
         productId: "$product._id",
         productName: "$product.productName",
         count: "$searchedProducts.count",
