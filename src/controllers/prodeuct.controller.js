@@ -25,11 +25,10 @@ const createProduct = asyncHandler( async (req, res) =>{
 
     const productImg = await uploadOnCloudinaryBuffer(req.file);
 
-    // if (!productImg) {
-    //     throw new ApiError(400, "productImage file is required")
-    // }
+    if (!productImg) {
+        throw new ApiError(400, "productImage file is required")
+    }
     
-// console.log("Uploaded Image:", productImg)
 
     const product = await Product.create({
         productName,
@@ -57,8 +56,7 @@ const updateProduct = asyncHandler( async (req, res) => {
     const {productName, quantity, price, category, productId} = req.body
 
     const product = await Product.findOneAndUpdate(
-        // req.body._id,
-        // req.params._id,
+ 
         { productId: productId},
         {
             $set: {
